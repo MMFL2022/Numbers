@@ -1,0 +1,11 @@
+{
+  "de": "Deutsch",
+  "en-US": "English",
+  "es": "Español",
+  "fr": "Français",
+  "pl": "Polski",
+  "en-GB": "English (United Kingdom)",
+  "samples": {
+    "test": "Test (de)"
+  }
+}
