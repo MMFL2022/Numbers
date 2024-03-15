@@ -8,6 +8,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NumberInputComponent } from './number-input/number-input.component';
 import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FormsModule } from '@angular/forms';
     }),
   ],
   providers: [
+    DecimalPipe,
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFactory,

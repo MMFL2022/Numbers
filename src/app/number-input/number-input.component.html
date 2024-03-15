@@ -2,14 +2,22 @@
   <input
     type="text"
     inputmode="decimal"
-    [value]="valueAsNumber | number: '':selectedLanguage"
+    [value]="valueAsString"
     (blur)="onBlur($event)"
   >
 </div>
 
 <br />
-<span>currentString: {{currentString}}</span>
-<br />
-<span>currentString formatted: {{currentString | number: '':selectedLanguage}}</span>
+<span>valueAsString: {{valueAsString}}</span>
 <br />
 <span>valueAsNumber: {{valueAsNumber}}</span>
+
+<br />
+<br />
+<span>decimalLocaleSymbol: '{{decimalLocaleSymbol}}'</span>
+<br />
+<span>groupLocaleSymbol: '{{groupLocaleSymbol}}'</span>
+<br />
+<span>minusLocaleSymbol: '{{minusLocaleSymbol}}'</span>
+<br />
+<span>plusLocaleSymbol: '{{plusLocaleSymbol}}'</span>
