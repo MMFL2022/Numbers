@@ -27,15 +27,6 @@ export class AppComponent {
   availableLanguages: string[] = [];
   currentLanguage: string = 'en-US';
 
-  value1: number = -12345.54321;
-  value2: number = -12345.54321;
-  value3: number = -12345.54321;
-  value4: number = -12345.54321;
-  value5: number = -12345.54321;
-  value6: number = -12345.54321;
-  value7: number = -12345.54321;
-  value8: number = -12345.54321;
-
   constructor(
     @Inject(LOCALE_ID) public localeId: string,
     public translateService: TranslateService,

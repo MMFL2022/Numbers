@@ -12,3 +12,10 @@ body {
   color: var(#5f5f5f);
 }
 /* End General Styles */
+.content {
+  display: flex;
+  margin-top: 1rem;
+}
+span {
+  font-size: small;
+}

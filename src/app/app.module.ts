@@ -9,11 +9,17 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NumberInputComponent } from './number-input/number-input.component';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
+import { TimeInputComponent } from './time-input/time-input.component';
+import { NumberDisplayComponent } from './number-display/number-display.component';
+import { TimeDisplayComponent } from './time-display/time-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NumberInputComponent
+    NumberInputComponent,
+    TimeInputComponent,
+    NumberDisplayComponent,
+    TimeDisplayComponent
   ],
   imports: [
     BrowserModule,

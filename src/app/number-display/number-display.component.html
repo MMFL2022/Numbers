@@ -1,0 +1,39 @@
+
+
+<div class="content">
+  <div>
+    <span>{{value1}}</span>
+    <app-number-input [(valueAsNumber)]="value1"></app-number-input>
+  </div>
+  <div>
+    <span>{{value2}}</span>
+    <app-number-input [(valueAsNumber)]="value2" [restorePreviousValue]="false"></app-number-input>
+  </div>
+  <div>
+    <span>{{value3}}</span>
+    <app-number-input [(valueAsNumber)]="value3" [precision]="0"></app-number-input>
+  </div>
+  <div>
+    <span>{{value4}}</span>
+    <app-number-input [(valueAsNumber)]="value4" [precision]="2"></app-number-input>
+  </div>
+</div>
+
+<div class="content">
+  <div>
+    <span>{{value5}}</span>
+    <app-number-input [(valueAsNumber)]="value5" [minValue]="0"></app-number-input>
+  </div>
+  <div>
+    <span>{{value6}}</span>
+    <app-number-input [(valueAsNumber)]="value6" [maxValue]="10"></app-number-input>
+  </div>
+  <div>
+    <span>{{value7}}</span>
+    <app-number-input [(valueAsNumber)]="value7" [precision]="0" [minValue]="0" [maxValue]="10"></app-number-input>
+  </div>
+  <div>
+    <span>{{value8}}</span>
+    <app-number-input [(valueAsNumber)]="value8" [precision]="2" [minValue]="0" [maxValue]="10"></app-number-input>
+  </div>
+</div>

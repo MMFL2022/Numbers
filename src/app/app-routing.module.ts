@@ -1,7 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NumberDisplayComponent } from './number-display/number-display.component';
+import { TimeDisplayComponent } from './time-display/time-display.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'numbers',
+    component: NumberDisplayComponent
+  },
+  {
+    path: 'time',
+    component: TimeDisplayComponent
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
