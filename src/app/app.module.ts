@@ -6,15 +6,19 @@ import { AppComponent } from './app.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NumberInputComponent } from './number-input/number-input.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NumberInputComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -43,7 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export function appInitializerFactory(translateService: TranslateService) {
   return () => {
-    translateService.addLangs(['en-US', 'en-GB', 'fr', 'es', 'de', 'pl']);
+    translateService.addLangs(['en-US', 'en-GB', 'fr', 'es', 'de-DE', 'pl']);
     translateService.setDefaultLang('en-US');
 
     translateService.use(translateService.getBrowserCultureLang()!);

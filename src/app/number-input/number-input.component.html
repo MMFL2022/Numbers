@@ -1,0 +1,15 @@
+<div>
+  <input
+    type="text"
+    inputmode="numeric"
+    [value]="valueAsNumber | number: '':selectedLanguage"
+    (blur)="onBlur($event)"
+  >
+</div>
+
+<br />
+<span>currentString: {{currentString}}</span>
+<br />
+<span>currentString formatted: {{currentString | number: '':selectedLanguage}}</span>
+<br />
+<span>valueAsNumber: {{valueAsNumber}}</span>

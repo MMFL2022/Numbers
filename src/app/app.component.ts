@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 registerLocaleData(localeFr, 'fr');
 registerLocaleData(localeEs, 'es');
-registerLocaleData(localeDe, 'de');
+registerLocaleData(localeDe, 'de-DE');
 registerLocaleData(localePl, 'pl');
 registerLocaleData(localeEnGb, 'en-GB');
 
