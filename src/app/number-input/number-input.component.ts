@@ -1,5 +1,5 @@
 import { DecimalPipe, NumberFormatStyle, NumberSymbol, getLocaleNumberFormat, getLocaleNumberSymbol } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -8,6 +8,8 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./number-input.component.scss']
 })
 export class NumberInputComponent implements OnInit {
+  @Input() restorePreviousValue: boolean = true;
+
   selectedLanguage: string = 'en-US';
 
   valueAsNumber: number = -12345.54321;
@@ -55,8 +57,10 @@ export class NumberInputComponent implements OnInit {
   }
 
   onFocus(event: FocusEvent) {
-    this.previousValueAsNumber = this.valueAsNumber;
-    this.valueAsString = '';
+    if (this.restorePreviousValue) {
+      this.previousValueAsNumber = this.valueAsNumber;
+      this.valueAsString = '';
+    }
   }
 
   onBlur(event: FocusEvent) {
@@ -76,7 +80,11 @@ export class NumberInputComponent implements OnInit {
       let parsedNumber = parseFloat(cleanValue);
 
       if (cleanValue == '' || isNaN(parsedNumber)) {
-        this.valueAsNumber = this.previousValueAsNumber;
+        if (this.restorePreviousValue) {
+          this.valueAsNumber = this.previousValueAsNumber;
+        } else {
+          this.valueAsNumber = 0;
+        }
       } else {
         this.valueAsNumber = parsedNumber;
       }
