@@ -13,10 +13,18 @@ export class NumberInputComponent implements OnInit {
   valueAsNumber: number = -12345.54321;
   valueAsString: string = '';
 
-  decimalLocaleSymbol: string = '';
+  previousValueAsNumber: number = 0;
+
   groupLocaleSymbol: string = '';
+  groupLocaleRegEx: RegExp = new RegExp('');
+  decimalLocaleSymbol: string = '';
+  decimalLocaleRegEx: RegExp = new RegExp('');
   minusLocaleSymbol: string = '';
+  minusLocaleRegEx: RegExp = new RegExp('');
   plusLocaleSymbol: string = '';
+  plusLocaleRegEx: RegExp = new RegExp('');
+
+  allowedCharacters: RegExp = new RegExp('');
 
   constructor(
     private translateService: TranslateService,
@@ -27,19 +35,28 @@ export class NumberInputComponent implements OnInit {
       next: ((value: LangChangeEvent) => {
         this.selectedLanguage = value.lang;
 
-        this.decimalLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Decimal);
         this.groupLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Group);
+        this.decimalLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Decimal);
         this.minusLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.MinusSign);
         this.plusLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.PlusSign);
 
-        let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
-        if (transformedValue != null) {
-          this.valueAsString = transformedValue;
-        }
+        this.groupLocaleRegEx = new RegExp(`[${this.groupLocaleSymbol}]`, 'g');
+        this.decimalLocaleRegEx = new RegExp(`[${this.decimalLocaleSymbol}]`, 'g');
+        this.minusLocaleRegEx = new RegExp(`[${this.minusLocaleSymbol}]`, 'g');
+        this.plusLocaleRegEx = new RegExp(`[${this.plusLocaleSymbol}]`, 'g');
 
-        console.log(this.selectedLanguage, this.decimalLocaleSymbol, this.groupLocaleSymbol, this.minusLocaleSymbol, this.plusLocaleSymbol);
+        this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
+
+        this.localizeNumber();
+
+        console.log(this.selectedLanguage, this.groupLocaleSymbol, this.decimalLocaleSymbol, this.minusLocaleSymbol, this.plusLocaleSymbol, this.allowedCharacters);
       })
     });
+  }
+
+  onFocus(event: FocusEvent) {
+    this.previousValueAsNumber = this.valueAsNumber;
+    this.valueAsString = '';
   }
 
   onBlur(event: FocusEvent) {
@@ -48,18 +65,38 @@ export class NumberInputComponent implements OnInit {
 
       let currentValue = target.value;
 
-      let cleanValue = currentValue.split(this.groupLocaleSymbol).join('');
-      cleanValue = cleanValue.split(this.decimalLocaleSymbol).join('.');
-      cleanValue = cleanValue.split(this.minusLocaleSymbol).join('-');
-      cleanValue = cleanValue.split(this.plusLocaleSymbol).join('+');
-
-      this.valueAsNumber = +cleanValue;
-
-      console.log(target.value, cleanValue);
-      let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
-      if (transformedValue != null) {
-        this.valueAsString = transformedValue;
+      let cleanValue = '';
+      if (currentValue != '') {
+        cleanValue = currentValue.replace(this.groupLocaleRegEx, '');
+        cleanValue = cleanValue.replace(this.decimalLocaleRegEx, '.');
+        cleanValue = cleanValue.replace(this.minusLocaleRegEx, '-');
+        cleanValue = cleanValue.replace(this.plusLocaleRegEx, '+');
       }
+
+      let parsedNumber = parseFloat(cleanValue);
+
+      if (cleanValue == '' || isNaN(parsedNumber)) {
+        this.valueAsNumber = this.previousValueAsNumber;
+      } else {
+        this.valueAsNumber = parsedNumber;
+      }
+
+      this.localizeNumber();
+    }
+  }
+
+  onKeypress(event: KeyboardEvent) {
+    let value = event.key;
+
+    if (!this.allowedCharacters.test(value)) {
+      event.preventDefault();
+    }
+  }
+
+  private localizeNumber() {
+    let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
+    if (transformedValue != null) {
+      this.valueAsString = transformedValue;
     }
   }
 }

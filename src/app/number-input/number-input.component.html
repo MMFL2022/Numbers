@@ -3,7 +3,9 @@
     type="text"
     inputmode="decimal"
     [value]="valueAsString"
+    (focus)="onFocus($event)"
     (blur)="onBlur($event)"
+    (keypress)="onKeypress($event)"
   >
 </div>
 
@@ -11,6 +13,8 @@
 <span>valueAsString: {{valueAsString}}</span>
 <br />
 <span>valueAsNumber: {{valueAsNumber}}</span>
+<br />
+<span>previousValueAsNumber: {{previousValueAsNumber}}</span>
 
 <br />
 <br />
@@ -21,3 +25,5 @@
 <span>minusLocaleSymbol: '{{minusLocaleSymbol}}'</span>
 <br />
 <span>plusLocaleSymbol: '{{plusLocaleSymbol}}'</span>
+<br />
+<span>allowedCharacters RegEx: '{{allowedCharacters}}'</span>
