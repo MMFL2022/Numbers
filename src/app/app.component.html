@@ -24,31 +24,39 @@
 
   <div class="numbers">
     <div>
-      <app-number-input></app-number-input>
+      <span>{{value1}}</span>
+      <app-number-input [(valueAsNumber)]="value1"></app-number-input>
     </div>
     <div>
-      <app-number-input [restorePreviousValue]="false"></app-number-input>
+      <span>{{value2}}</span>
+      <app-number-input [(valueAsNumber)]="value2" [restorePreviousValue]="false"></app-number-input>
     </div>
     <div>
-      <app-number-input [precision]="0"></app-number-input>
+      <span>{{value3}}</span>
+      <app-number-input [(valueAsNumber)]="value3" [precision]="0"></app-number-input>
     </div>
     <div>
-      <app-number-input [precision]="2"></app-number-input>
+      <span>{{value4}}</span>
+      <app-number-input [(valueAsNumber)]="value4" [precision]="2"></app-number-input>
     </div>
   </div>
 
   <div class="numbers">
     <div>
-      <app-number-input [minValue]="0"></app-number-input>
+      <span>{{value5}}</span>
+      <app-number-input [(valueAsNumber)]="value5" [minValue]="0"></app-number-input>
     </div>
     <div>
-      <app-number-input [maxValue]="10"></app-number-input>
+      <span>{{value6}}</span>
+      <app-number-input [(valueAsNumber)]="value6" [maxValue]="10"></app-number-input>
     </div>
     <div>
-      <app-number-input [precision]="0" [minValue]="0" [maxValue]="10"></app-number-input>
+      <span>{{value7}}</span>
+      <app-number-input [(valueAsNumber)]="value7" [precision]="0" [minValue]="0" [maxValue]="10"></app-number-input>
     </div>
     <div>
-      <app-number-input [precision]="2" [minValue]="0" [maxValue]="10"></app-number-input>
+      <span>{{value8}}</span>
+      <app-number-input [(valueAsNumber)]="value8" [precision]="2" [minValue]="0" [maxValue]="10"></app-number-input>
     </div>
   </div>
 

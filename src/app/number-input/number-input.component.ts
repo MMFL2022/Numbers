@@ -1,5 +1,5 @@
-import { DecimalPipe, NumberSymbol, getLocaleNumberFormat, getLocaleNumberSymbol } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { DecimalPipe, NumberSymbol, getLocaleNumberSymbol } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -15,7 +15,9 @@ export class NumberInputComponent implements OnInit {
 
   selectedLanguage: string = 'en-US';
 
-  valueAsNumber: number = -12345.54321;
+  @Input() valueAsNumber: number = 0;
+  @Output() valueAsNumberChange: EventEmitter<number> = new EventEmitter<number>;
+
   valueAsString: string = '';
 
   previousValueAsNumber: number = 0;
@@ -58,6 +60,7 @@ export class NumberInputComponent implements OnInit {
 
         this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
 
+        this.validateNumber();
         this.localizeNumber();
       })
     });
@@ -96,7 +99,10 @@ export class NumberInputComponent implements OnInit {
         this.valueAsNumber = parsedNumber;
       }
 
+      this.validateNumber();
       this.localizeNumber();
+
+      this.valueAsNumberChange.emit(this.valueAsNumber);
     }
   }
 
@@ -108,7 +114,7 @@ export class NumberInputComponent implements OnInit {
     }
   }
 
-  private localizeNumber() {
+  private validateNumber() {
     if (this.precision != undefined) {
       this.valueAsNumber = parseFloat(this.valueAsNumber.toFixed(this.precision));
     }
@@ -124,7 +130,9 @@ export class NumberInputComponent implements OnInit {
         this.valueAsNumber = this.maxValue;
       }
     }
+  }
 
+  private localizeNumber() {
     let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
     if (transformedValue != null) {
       this.valueAsString = transformedValue;
