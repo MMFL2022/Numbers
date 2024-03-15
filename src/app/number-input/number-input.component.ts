@@ -1,3 +1,4 @@
+import { NumberFormatStyle, getLocaleNumberFormat } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
@@ -27,7 +28,10 @@ export class NumberInputComponent implements OnInit {
   onBlur(event: FocusEvent) {
     if (event.target != null) {
       let target = event.target as HTMLInputElement;
+
+      console.log(target.value, target.valueAsNumber);
       this.currentString = target.value;
+      console.log(getLocaleNumberFormat('en-US', NumberFormatStyle.Decimal));
       this.valueAsNumber = target.valueAsNumber;
     }
   }
