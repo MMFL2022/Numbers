@@ -24,12 +24,21 @@
 
   <br />
   <br />
-  <div>
-    <app-number-input></app-number-input>
+  <div class="numbers">
+    <div>
+      <app-number-input></app-number-input>
+    </div>
+    <div>
+      <app-number-input [restorePreviousValue]="false"></app-number-input>
+    </div>
+    <div>
+      <app-number-input [precision]="0"></app-number-input>
+    </div>
+    <div>
+      <app-number-input [precision]="2"></app-number-input>
+    </div>
   </div>
-  <div>
-    <app-number-input [restorePreviousValue]="false"></app-number-input>
-  </div>
+
   <div>
     <router-outlet></router-outlet>
   </div>

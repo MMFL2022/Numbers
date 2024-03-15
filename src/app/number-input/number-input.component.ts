@@ -9,6 +9,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 })
 export class NumberInputComponent implements OnInit {
   @Input() restorePreviousValue: boolean = true;
+  @Input() precision: number | undefined;
 
   selectedLanguage: string = 'en-US';
 
@@ -50,8 +51,6 @@ export class NumberInputComponent implements OnInit {
         this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
 
         this.localizeNumber();
-
-        console.log(this.selectedLanguage, this.groupLocaleSymbol, this.decimalLocaleSymbol, this.minusLocaleSymbol, this.plusLocaleSymbol, this.allowedCharacters);
       })
     });
   }
@@ -102,6 +101,10 @@ export class NumberInputComponent implements OnInit {
   }
 
   private localizeNumber() {
+    if (this.precision != undefined) {
+      this.valueAsNumber = parseFloat(this.valueAsNumber.toFixed(this.precision));
+    }
+
     let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
     if (transformedValue != null) {
       this.valueAsString = transformedValue;
