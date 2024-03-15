@@ -1,1 +1,18 @@
-<p>time-input works!</p>
+<div>
+  <input
+    type="time"
+    [value]="valueAsString"
+    (focus)="onFocus($event)"
+    (blur)="onBlur($event)"
+    (keypress)="onKeypress($event)"
+  >
+</div>
+
+<div>
+  <br />
+  <span>tempValue: {{tempValue}}</span>
+  <br />
+  <span>tempValueAsDate:</span>
+  <br />
+  <span>{{tempValueAsDate}}</span>
+</div>
