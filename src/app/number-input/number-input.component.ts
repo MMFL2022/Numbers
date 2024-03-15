@@ -1,4 +1,4 @@
-import { DecimalPipe, NumberFormatStyle, NumberSymbol, getLocaleNumberFormat, getLocaleNumberSymbol } from '@angular/common';
+import { DecimalPipe, NumberSymbol, getLocaleNumberFormat, getLocaleNumberSymbol } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
@@ -10,6 +10,8 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 export class NumberInputComponent implements OnInit {
   @Input() restorePreviousValue: boolean = true;
   @Input() precision: number | undefined;
+  @Input() minValue: number | undefined;
+  @Input() maxValue: number | undefined;
 
   selectedLanguage: string = 'en-US';
 
@@ -29,11 +31,17 @@ export class NumberInputComponent implements OnInit {
 
   allowedCharacters: RegExp = new RegExp('');
 
+  inputMode: string = 'decimal';
+
   constructor(
     private translateService: TranslateService,
     private decimalPipe: DecimalPipe) {}
 
   ngOnInit(): void {
+    if (this.precision != undefined && this.precision == 0) {
+        this.inputMode = 'numeric';
+    }
+
     this.translateService.onLangChange.subscribe({
       next: ((value: LangChangeEvent) => {
         this.selectedLanguage = value.lang;
@@ -103,6 +111,18 @@ export class NumberInputComponent implements OnInit {
   private localizeNumber() {
     if (this.precision != undefined) {
       this.valueAsNumber = parseFloat(this.valueAsNumber.toFixed(this.precision));
+    }
+
+    if (this.minValue != undefined) {
+      if (this.valueAsNumber < this.minValue) {
+        this.valueAsNumber = this.minValue;
+      }
+    }
+
+    if (this.maxValue != undefined) {
+      if (this.valueAsNumber > this.maxValue) {
+        this.valueAsNumber = this.maxValue;
+      }
     }
 
     let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);

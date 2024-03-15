@@ -22,8 +22,6 @@
     <span>Testing Translations: {{ 'samples.test' | translate }}</span>
   </div>
 
-  <br />
-  <br />
   <div class="numbers">
     <div>
       <app-number-input></app-number-input>
@@ -36,6 +34,21 @@
     </div>
     <div>
       <app-number-input [precision]="2"></app-number-input>
+    </div>
+  </div>
+
+  <div class="numbers">
+    <div>
+      <app-number-input [minValue]="0"></app-number-input>
+    </div>
+    <div>
+      <app-number-input [maxValue]="10"></app-number-input>
+    </div>
+    <div>
+      <app-number-input [precision]="0" [minValue]="0" [maxValue]="10"></app-number-input>
+    </div>
+    <div>
+      <app-number-input [precision]="2" [minValue]="0" [maxValue]="10"></app-number-input>
     </div>
   </div>
 

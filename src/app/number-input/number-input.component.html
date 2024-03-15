@@ -1,7 +1,7 @@
 <div>
   <input
     type="text"
-    inputmode="decimal"
+    [attr.inputmode]="inputMode"
     [value]="valueAsString"
     (focus)="onFocus($event)"
     (blur)="onBlur($event)"
@@ -11,6 +11,10 @@
 
 <br />
 <span>precision: {{precision}}</span>
+<br />
+<span>minValue: {{minValue}}</span>
+<br />
+<span>maxValue: {{maxValue}}</span>
 <br />
 <span>valueAsString: {{valueAsString}}</span>
 <br />
