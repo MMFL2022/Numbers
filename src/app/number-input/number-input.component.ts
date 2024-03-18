@@ -1,5 +1,5 @@
 import { DecimalPipe, NumberSymbol, getLocaleNumberSymbol } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -37,13 +37,18 @@ export class NumberInputComponent implements OnInit {
 
   constructor(
     private translateService: TranslateService,
-    private decimalPipe: DecimalPipe) {}
+    private decimalPipe: DecimalPipe,
+    private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (this.precision != undefined && this.precision == 0) {
         this.inputMode = 'numeric';
     }
 
+    this.subscribeToLangChange();
+  }
+
+  subscribeToLangChange() {
     this.translateService.onLangChange.subscribe({
       next: ((value: LangChangeEvent) => {
         this.selectedLanguage = value.lang;
@@ -59,6 +64,8 @@ export class NumberInputComponent implements OnInit {
         this.plusLocaleRegEx = new RegExp(`[${this.plusLocaleSymbol}]`, 'g');
 
         this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
+
+        this.cdr.detectChanges();
 
         this.validate();
         this.localize();

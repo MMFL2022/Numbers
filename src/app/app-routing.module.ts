@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'time',
     component: TimeDisplayComponent
+  },
+  {
+    path: '',
+    component: NumberDisplayComponent
   }
 ];
 
