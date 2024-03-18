@@ -10,7 +10,7 @@ export class TimeInputComponent implements OnInit {
   @Input() restorePreviousValue: boolean = true;
   @Input() showSeconds: boolean = false;
 
-  private selectedLanguage: string = 'en-US';
+  // private selectedLanguage: string = 'en-US';
 
   @Input() valueAsDate: Date = new Date();
   @Output() valueAsDateChange: EventEmitter<Date> = new EventEmitter<Date>;
@@ -24,7 +24,7 @@ export class TimeInputComponent implements OnInit {
   ngOnInit(): void {
     this.translateService.onLangChange.subscribe({
       next: ((value: LangChangeEvent) => {
-        this.selectedLanguage = value.lang;
+        // this.selectedLanguage = value.lang;
 
         // if (this.hourCycle == undefined) {
         //   let locale = new Intl.DateTimeFormat(this.selectedLanguage, {hour: 'numeric'}).resolvedOptions();
@@ -43,7 +43,6 @@ export class TimeInputComponent implements OnInit {
   }
 
   onFocus(event: FocusEvent) {
-    console.log('onFocus', event);
     if (this.restorePreviousValue) {
       this.previousValueAsDate = this.valueAsDate;
       this.valueAsString = '';
@@ -51,14 +50,10 @@ export class TimeInputComponent implements OnInit {
   }
 
   onBlur(event: FocusEvent) {
-    console.log('onBlur', event);
-
     if (event.target != null) {
       let target = event.target as HTMLInputElement;
 
       let currentValue = target.value;
-
-      console.log('onBlur current values', currentValue);
 
       if (currentValue == '') {
         if (this.restorePreviousValue) {
@@ -68,8 +63,6 @@ export class TimeInputComponent implements OnInit {
         let timeParts = currentValue.split(':');
         let hours = parseInt(timeParts[0]);
         let minutes = parseInt(timeParts[1]);
-
-        console.log('', timeParts, hours, minutes);
 
         this.valueAsDate.setHours(hours);
         this.valueAsDate.setMinutes(minutes);
@@ -89,8 +82,6 @@ export class TimeInputComponent implements OnInit {
       }
 
       this.localize();
-
-      console.log('emitting valueAsDate', this.valueAsDate);
 
       this.valueAsDateChange.emit(this.valueAsDate);
     }
