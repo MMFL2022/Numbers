@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class TimeDisplayComponent {
 
-  value1: number = -12345.54321;
+  value1: Date = new Date();
   value2: number = -12345.54321;
   value3: number = -12345.54321;
   value4: number = -12345.54321;
