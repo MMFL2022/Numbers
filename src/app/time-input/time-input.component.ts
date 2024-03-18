@@ -55,6 +55,8 @@ export class TimeInputComponent implements OnInit {
 
       let currentValue = target.value;
 
+      alert(currentValue);
+
       if (currentValue == '') {
         if (this.restorePreviousValue) {
           this.valueAsDate = this.previousValueAsDate;
