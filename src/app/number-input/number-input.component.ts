@@ -60,8 +60,8 @@ export class NumberInputComponent implements OnInit {
 
         this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
 
-        this.validateNumber();
-        this.localizeNumber();
+        this.validate();
+        this.localize();
       })
     });
   }
@@ -99,8 +99,8 @@ export class NumberInputComponent implements OnInit {
         this.valueAsNumber = parsedNumber;
       }
 
-      this.validateNumber();
-      this.localizeNumber();
+      this.validate();
+      this.localize();
 
       this.valueAsNumberChange.emit(this.valueAsNumber);
     }
@@ -114,7 +114,7 @@ export class NumberInputComponent implements OnInit {
     }
   }
 
-  private validateNumber() {
+  private validate() {
     if (this.precision != undefined) {
       this.valueAsNumber = parseFloat(this.valueAsNumber.toFixed(this.precision));
     }
@@ -132,7 +132,7 @@ export class NumberInputComponent implements OnInit {
     }
   }
 
-  private localizeNumber() {
+  private localize() {
     let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
     if (transformedValue != null) {
       this.valueAsString = transformedValue;
