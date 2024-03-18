@@ -13,7 +13,7 @@ export class NumberInputComponent implements OnInit {
   @Input() minValue: number | undefined;
   @Input() maxValue: number | undefined;
 
-  selectedLanguage: string = 'en-US';
+  private selectedLanguage: string = 'en-US';
 
   @Input() valueAsNumber: number = 0;
   @Output() valueAsNumberChange: EventEmitter<number> = new EventEmitter<number>;

@@ -1,6 +1,7 @@
 <div>
   <input
     type="time"
+    [step]="showSeconds ? '1' : '60'"
     [value]="valueAsString"
     (focus)="onFocus($event)"
     (blur)="onBlur($event)"
@@ -8,12 +9,6 @@
 </div>
 
 <div>
-  <!-- <br />
-  <span>tempValue: {{tempValue}}</span>
-  <br />
-  <span>tempValueAsDate:</span>
-  <br />
-  <span>{{tempValueAsDate}}</span> -->
   <br />
   <span>valueAsString: {{valueAsString}}</span>
   <br />

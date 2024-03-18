@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
@@ -8,19 +8,16 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 })
 export class TimeInputComponent implements OnInit {
   @Input() restorePreviousValue: boolean = true;
-  @Input() minValue: number | undefined;
-  @Input() maxValue: number | undefined;
+  @Input() showSeconds: boolean = false;
 
-  selectedLanguage: string = 'en-US';
+  private selectedLanguage: string = 'en-US';
 
-  private defaultDate = new Date(1900, 0, 1, 0, 0, 0, 0);
-
-  @Input() valueAsDate: Date = this.defaultDate;
+  @Input() valueAsDate: Date = new Date();
   @Output() valueAsDateChange: EventEmitter<Date> = new EventEmitter<Date>;
 
   valueAsString: string = '00:00';
 
-  previousValueAsDate: Date = this.defaultDate;
+  previousValueAsDate: Date = new Date();
 
   constructor(private translateService: TranslateService) {}
 
@@ -36,9 +33,10 @@ export class TimeInputComponent implements OnInit {
         //   // this.hourCycle = hourCycle;
         // }
 
-        this.previousValueAsDate = this.valueAsDate;
+        if (this.restorePreviousValue) {
+          this.previousValueAsDate = this.valueAsDate;
+        }
 
-        this.validate();
         this.localize();
       })
     });
@@ -59,82 +57,57 @@ export class TimeInputComponent implements OnInit {
       let target = event.target as HTMLInputElement;
 
       let currentValue = target.value;
-      let currentValueAsDate = target.valueAsDate;
 
-      console.log('onBlur current values', currentValue, currentValueAsDate);
+      console.log('onBlur current values', currentValue);
 
-      if (currentValueAsDate == null) {
+      if (currentValue == '') {
         if (this.restorePreviousValue) {
           this.valueAsDate = this.previousValueAsDate;
-        } else {
-          this.valueAsDate = this.defaultDate;
         }
       } else {
-        let selectedDateTime = this.defaultDate;
-
         let timeParts = currentValue.split(':');
         let hours = parseInt(timeParts[0]);
         let minutes = parseInt(timeParts[1]);
 
-        selectedDateTime.setHours(hours);
-        selectedDateTime.setMinutes(minutes);
+        console.log('', timeParts, hours, minutes);
 
-        this.valueAsDate = selectedDateTime;
+        this.valueAsDate.setHours(hours);
+        this.valueAsDate.setMinutes(minutes);
+
+        if (this.showSeconds) {
+          let seconds = parseInt(timeParts[2]);
+          this.valueAsDate.setSeconds(seconds);
+        } else {
+          this.valueAsDate.setSeconds(0);
+        }
+
+        this.valueAsDate.setMilliseconds(0);
+
+        // Date object is mutable so changing the hours, minutes and seconds properties won't
+        // change the underlying value so reinstantiate the original date object with the new changes
+        this.valueAsDate = new Date(this.valueAsDate);
       }
 
-      this.validate();
       this.localize();
 
-      console.log('emitting valueAsDate', this.valueAsDate, currentValueAsDate);
+      console.log('emitting valueAsDate', this.valueAsDate);
 
       this.valueAsDateChange.emit(this.valueAsDate);
     }
   }
 
-  private validate() {
-    // add validation logic
-
-    let selectedTime = this.getSelectedTime();
-
-    if (selectedTime != null) {
-      this.valueAsDate = selectedTime;
-    }
-    // else {
-    //   this.valueAsDate = this.defaultDate;
-    // }
-  }
-
   private localize() {
-    let transformedValue = this.getSelectedTime();
+    if (this.valueAsDate != null) {
+      let transformedHours = this.padNumber(this.valueAsDate.getHours());
+      let transformedMinutes = this.padNumber(this.valueAsDate.getMinutes());
 
-    if (transformedValue != null) {
-      let transformedHours = this.padNumber(transformedValue.getHours());
-      let transformedMinutes = this.padNumber(transformedValue.getMinutes());
       this.valueAsString = `${transformedHours}:${transformedMinutes}`;
+
+      if (this.showSeconds) {
+        let transformedSeconds = this.padNumber(this.valueAsDate.getSeconds());
+        this.valueAsString += `:${transformedSeconds}`;
+      }
     }
-  }
-
-  private getSelectedTime(): Date | null {
-    let year = this.defaultDate.getFullYear();
-    let month = this.defaultDate.getMonth();
-    let day = this.defaultDate.getDate();
-
-    let hours = this.valueAsDate.getHours();
-    let minutes = this.valueAsDate.getMinutes();
-    let seconds = this.valueAsDate.getSeconds();
-    let milliseconds = this.valueAsDate.getMilliseconds();
-
-    console.log(this.valueAsDate.getTime());
-
-    let transformedValue = new Date(year, month - 1, day, hours, minutes, seconds, milliseconds);
-
-    console.log('transformedValue', transformedValue);
-
-    if (transformedValue == null) {
-      return null;
-    }
-
-    return transformedValue;
   }
 
   private padNumber(number: number): string {
