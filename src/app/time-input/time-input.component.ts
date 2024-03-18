@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
@@ -11,7 +11,14 @@ export class TimeInputComponent implements OnInit {
 
   // private selectedLanguage: string = 'en-US';
 
-  @Input() valueAsDate: Date = new Date();
+  private _valueAsDate: Date = new Date();
+  public get valueAsDate(): Date {
+    return this._valueAsDate;
+  }
+  @Input() public set valueAsDate(value: Date) {
+    this._valueAsDate = value;
+    this.localize();
+  }
   @Output() valueAsDateChange: EventEmitter<Date> = new EventEmitter<Date>;
 
   valueAsString: string = '00:00';
@@ -33,7 +40,7 @@ export class TimeInputComponent implements OnInit {
         // }
 
         if (this.restorePreviousValue) {
-          this.previousValueAsDate = this.valueAsDate;
+          this.previousValueAsDate = this._valueAsDate;
         }
 
         this.localize();
@@ -43,7 +50,7 @@ export class TimeInputComponent implements OnInit {
 
   onFocus(event: FocusEvent) {
     if (this.restorePreviousValue) {
-      this.previousValueAsDate = this.valueAsDate;
+      this.previousValueAsDate = this._valueAsDate;
       this.valueAsString = '';
     }
   }
@@ -56,40 +63,40 @@ export class TimeInputComponent implements OnInit {
 
       if (currentValue == '') {
         if (this.restorePreviousValue) {
-          this.valueAsDate = this.previousValueAsDate;
+          this._valueAsDate = this.previousValueAsDate;
         }
       } else {
         let timeParts = currentValue.split(':');
         let hours = parseInt(timeParts[0]);
         let minutes = parseInt(timeParts[1]);
 
-        this.valueAsDate.setHours(hours);
-        this.valueAsDate.setMinutes(minutes);
-        this.valueAsDate.setSeconds(0);
-        this.valueAsDate.setMilliseconds(0);
+        this._valueAsDate.setHours(hours);
+        this._valueAsDate.setMinutes(minutes);
+        this._valueAsDate.setSeconds(0);
+        this._valueAsDate.setMilliseconds(0);
 
         // Date object is mutable so changing the hours, minutes and seconds properties won't
         // change the underlying value so reinstantiate the original date object with the new changes
-        this.valueAsDate = new Date(this.valueAsDate);
+        this._valueAsDate = new Date(this._valueAsDate);
       }
 
       this.localize();
 
-      this.valueAsDateChange.emit(this.valueAsDate);
+      this.valueAsDateChange.emit(this._valueAsDate);
     }
   }
 
   private localize() {
-    if (this.valueAsDate != null) {
-      let transformedHours = this.padNumber(this.valueAsDate.getHours());
-      let transformedMinutes = this.padNumber(this.valueAsDate.getMinutes());
+    if (this._valueAsDate != null) {
+      let transformedHours = this.padNumber(this._valueAsDate.getHours());
+      let transformedMinutes = this.padNumber(this._valueAsDate.getMinutes());
 
       this.valueAsString = `${transformedHours}:${transformedMinutes}`;
     }
   }
 
   private padNumber(number: number): string {
-    if (number > 10) {
+    if (number > 9) {
       return number.toString();
     }
 

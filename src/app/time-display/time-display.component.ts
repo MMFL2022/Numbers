@@ -8,12 +8,22 @@ import { Component } from '@angular/core';
 export class TimeDisplayComponent {
 
   value1: Date = new Date();
-  value2: number = -12345.54321;
-  value3: number = -12345.54321;
-  value4: number = -12345.54321;
-  value5: number = -12345.54321;
-  value6: number = -12345.54321;
-  value7: number = -12345.54321;
-  value8: number = -12345.54321;
+
+  private _value2: Date = new Date();
+  public get value2(): Date {
+    return this._value2;
+  }
+  public set value2(value: Date) {
+    this._value2 = value;
+    this.value3 = value;
+  }
+
+  private _value3: Date = new Date();
+  public get value3(): Date {
+    return this._value3;
+  }
+  public set value3(value: Date) {
+    this._value3 = value;
+  }
 
 }
