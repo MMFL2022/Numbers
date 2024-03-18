@@ -7,8 +7,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
   styleUrls: ['./time-input.component.scss']
 })
 export class TimeInputComponent implements OnInit {
-  @Input() restorePreviousValue: boolean = true;
-  @Input() showSeconds: boolean = false;
+  @Input() restorePreviousValue: boolean = false;
 
   // private selectedLanguage: string = 'en-US';
 
@@ -55,8 +54,6 @@ export class TimeInputComponent implements OnInit {
 
       let currentValue = target.value;
 
-      alert(currentValue);
-
       if (currentValue == '') {
         if (this.restorePreviousValue) {
           this.valueAsDate = this.previousValueAsDate;
@@ -68,14 +65,7 @@ export class TimeInputComponent implements OnInit {
 
         this.valueAsDate.setHours(hours);
         this.valueAsDate.setMinutes(minutes);
-
-        if (this.showSeconds) {
-          let seconds = parseInt(timeParts[2]);
-          this.valueAsDate.setSeconds(seconds);
-        } else {
-          this.valueAsDate.setSeconds(0);
-        }
-
+        this.valueAsDate.setSeconds(0);
         this.valueAsDate.setMilliseconds(0);
 
         // Date object is mutable so changing the hours, minutes and seconds properties won't
@@ -95,11 +85,6 @@ export class TimeInputComponent implements OnInit {
       let transformedMinutes = this.padNumber(this.valueAsDate.getMinutes());
 
       this.valueAsString = `${transformedHours}:${transformedMinutes}`;
-
-      if (this.showSeconds) {
-        let transformedSeconds = this.padNumber(this.valueAsDate.getSeconds());
-        this.valueAsString += `:${transformedSeconds}`;
-      }
     }
   }
 
