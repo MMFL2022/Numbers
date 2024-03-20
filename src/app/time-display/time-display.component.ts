@@ -15,7 +15,10 @@ export class TimeDisplayComponent {
   }
   public set value2(value: Date) {
     this._value2 = value;
-    this.value3 = value;
+
+    if (this.value3 <= value) {
+      this.value3 = value;
+    }
   }
 
   private _value3: Date = new Date();

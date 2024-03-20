@@ -15,8 +15,15 @@ export class NumberInputComponent implements OnInit {
 
   private selectedLanguage: string = 'en-US';
 
-  @Input() valueAsNumber: number = 0;
-  @Output() valueAsNumberChange: EventEmitter<number> = new EventEmitter<number>;
+  private _valueAsNumber: number = 0;
+  public get valueAsNumber(): number {
+    return this._valueAsNumber;
+  }
+  @Input() public set valueAsNumber(value: number) {
+    this._valueAsNumber = value;
+    this.localize();
+  }
+  @Output() valueAsNumberChange: EventEmitter<number> = new EventEmitter<number>();
 
   valueAsString: string = '';
 
@@ -37,45 +44,46 @@ export class NumberInputComponent implements OnInit {
 
   constructor(
     private translateService: TranslateService,
-    private decimalPipe: DecimalPipe,
-    private cdr: ChangeDetectorRef) {}
+    private decimalPipe: DecimalPipe) {}
 
   ngOnInit(): void {
     if (this.precision != undefined && this.precision == 0) {
         this.inputMode = 'numeric';
     }
 
-    this.subscribeToLangChange();
-  }
+    this.selectedLanguage = this.translateService.currentLang;
 
-  subscribeToLangChange() {
+    this.updateLocale();
+
     this.translateService.onLangChange.subscribe({
       next: ((value: LangChangeEvent) => {
         this.selectedLanguage = value.lang;
 
-        this.groupLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Group);
-        this.decimalLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Decimal);
-        this.minusLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.MinusSign);
-        this.plusLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.PlusSign);
-
-        this.groupLocaleRegEx = new RegExp(`[${this.groupLocaleSymbol}]`, 'g');
-        this.decimalLocaleRegEx = new RegExp(`[${this.decimalLocaleSymbol}]`, 'g');
-        this.minusLocaleRegEx = new RegExp(`[${this.minusLocaleSymbol}]`, 'g');
-        this.plusLocaleRegEx = new RegExp(`[${this.plusLocaleSymbol}]`, 'g');
-
-        this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
-
-        this.cdr.detectChanges();
-
-        this.validate();
-        this.localize();
+        this.updateLocale();
       })
     });
   }
 
+  updateLocale() {
+    this.groupLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Group);
+    this.decimalLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.Decimal);
+    this.minusLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.MinusSign);
+    this.plusLocaleSymbol = getLocaleNumberSymbol(this.selectedLanguage, NumberSymbol.PlusSign);
+
+    this.groupLocaleRegEx = new RegExp(`[${this.groupLocaleSymbol}]`, 'g');
+    this.decimalLocaleRegEx = new RegExp(`[${this.decimalLocaleSymbol}]`, 'g');
+    this.minusLocaleRegEx = new RegExp(`[${this.minusLocaleSymbol}]`, 'g');
+    this.plusLocaleRegEx = new RegExp(`[${this.plusLocaleSymbol}]`, 'g');
+
+    this.allowedCharacters = new RegExp(`[0-9\\${this.groupLocaleSymbol}\\${this.decimalLocaleSymbol}\\${this.minusLocaleSymbol}\\${this.plusLocaleSymbol}]+`);
+
+    this.validate();
+    this.localize();
+  }
+
   onFocus(event: FocusEvent) {
     if (this.restorePreviousValue) {
-      this.previousValueAsNumber = this.valueAsNumber;
+      this.previousValueAsNumber = this._valueAsNumber;
       this.valueAsString = '';
     }
   }
@@ -98,18 +106,18 @@ export class NumberInputComponent implements OnInit {
 
       if (cleanValue == '' || isNaN(parsedNumber)) {
         if (this.restorePreviousValue) {
-          this.valueAsNumber = this.previousValueAsNumber;
+          this._valueAsNumber = this.previousValueAsNumber;
         } else {
-          this.valueAsNumber = 0;
+          this._valueAsNumber = 0;
         }
       } else {
-        this.valueAsNumber = parsedNumber;
+        this._valueAsNumber = parsedNumber;
       }
 
       this.validate();
       this.localize();
 
-      this.valueAsNumberChange.emit(this.valueAsNumber);
+      this.valueAsNumberChange.emit(this._valueAsNumber);
     }
   }
 
@@ -123,24 +131,24 @@ export class NumberInputComponent implements OnInit {
 
   private validate() {
     if (this.precision != undefined) {
-      this.valueAsNumber = parseFloat(this.valueAsNumber.toFixed(this.precision));
+      this._valueAsNumber = parseFloat(this._valueAsNumber.toFixed(this.precision));
     }
 
     if (this.minValue != undefined) {
-      if (this.valueAsNumber < this.minValue) {
-        this.valueAsNumber = this.minValue;
+      if (this._valueAsNumber < this.minValue) {
+        this._valueAsNumber = this.minValue;
       }
     }
 
     if (this.maxValue != undefined) {
-      if (this.valueAsNumber > this.maxValue) {
-        this.valueAsNumber = this.maxValue;
+      if (this._valueAsNumber > this.maxValue) {
+        this._valueAsNumber = this.maxValue;
       }
     }
   }
 
   private localize() {
-    let transformedValue = this.decimalPipe.transform(this.valueAsNumber, '', this.selectedLanguage);
+    let transformedValue = this.decimalPipe.transform(this._valueAsNumber, '', this.selectedLanguage);
     if (transformedValue != null) {
       this.valueAsString = transformedValue;
     }

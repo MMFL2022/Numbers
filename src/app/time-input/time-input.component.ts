@@ -19,7 +19,7 @@ export class TimeInputComponent implements OnInit {
     this._valueAsDate = value;
     this.localize();
   }
-  @Output() valueAsDateChange: EventEmitter<Date> = new EventEmitter<Date>;
+  @Output() valueAsDateChange: EventEmitter<Date> = new EventEmitter<Date>();
 
   valueAsString: string = '00:00';
 
