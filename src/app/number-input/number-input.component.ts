@@ -51,7 +51,7 @@ export class NumberInputComponent implements OnInit {
         this.inputMode = 'numeric';
     }
 
-    this.selectedLanguage = this.translateService.currentLang;
+    this.selectedLanguage = this.translateService.currentLang == undefined ? this.translateService.defaultLang: this.translateService.currentLang;
 
     this.updateLocale();
 
@@ -95,11 +95,15 @@ export class NumberInputComponent implements OnInit {
       let currentValue = target.value;
 
       let cleanValue = '';
-      if (currentValue != '') {
-        cleanValue = currentValue.replace(this.groupLocaleRegEx, '');
-        cleanValue = cleanValue.replace(this.decimalLocaleRegEx, '.');
-        cleanValue = cleanValue.replace(this.minusLocaleRegEx, '-');
-        cleanValue = cleanValue.replace(this.plusLocaleRegEx, '+');
+      if (this.selectedLanguage == undefined) {
+        cleanValue = currentValue;
+      } else {
+        if (currentValue != '' && this.selectedLanguage != undefined) {
+          cleanValue = currentValue.replace(this.groupLocaleRegEx, '');
+          cleanValue = cleanValue.replace(this.decimalLocaleRegEx, '.');
+          cleanValue = cleanValue.replace(this.minusLocaleRegEx, '-');
+          cleanValue = cleanValue.replace(this.plusLocaleRegEx, '+');
+        }
       }
 
       let parsedNumber = parseFloat(cleanValue);
