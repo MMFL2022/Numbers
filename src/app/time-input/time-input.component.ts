@@ -28,6 +28,8 @@ export class TimeInputComponent implements OnInit {
   constructor(private translateService: TranslateService) {}
 
   ngOnInit(): void {
+    //this.selectedLanguage = this.translateService.currentLang == undefined ? this.translateService.defaultLang: this.translateService.currentLang;
+
     this.translateService.onLangChange.subscribe({
       next: ((value: LangChangeEvent) => {
         // this.selectedLanguage = value.lang;
